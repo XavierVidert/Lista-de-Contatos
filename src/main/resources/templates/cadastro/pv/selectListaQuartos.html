@@ -1,0 +1,4 @@
+<select id="quarto">
+    <option th:each="quarto : ${quartos}" th:value="${quarto.id}"
+        th:text="${quarto.nome}"></option>
+</select>
