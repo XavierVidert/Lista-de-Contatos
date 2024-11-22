@@ -3,12 +3,19 @@ package com.primeira.appSpring.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="usuario")
+@Table(name="usuario",
+        uniqueConstraints = {
+            @UniqueConstraint(columnNames = {"usuario"}),
+            @UniqueConstraint(columnNames = {"apelido"})
+        })
 public class M_Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String usuario;
+    @Column(unique = true)
     private String apelido;
     private String senha;
 
