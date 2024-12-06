@@ -72,11 +72,51 @@
                        aria-describedby="spDataOut">
             </div>
         </div>
+        <script>
+            // Função para formatar a data no formato YYYY-MM-DD
+            function formatDate(date) {
+                const year = date.getFullYear();
+                const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mês começa do 0
+                const day = date.getDate().toString().padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            // Pega a data atual
+            const today = new Date();
+
+            // Definindo o valor do 'min' para o campo de data para não permitir datas anteriores à de hoje
+            const todayFormatted = formatDate(today);
+            document.getElementById('checkin').min = todayFormatted;
+            document.getElementById('checkout').min = todayFormatted;
+
+            // Preenche os campos com as datas formatadas
+            const nextDay = new Date(today);
+            nextDay.setDate(today.getDate() + 1); // Soma 1 dia à data atual
+            document.getElementById('checkin').value = todayFormatted;
+            document.getElementById('checkout').value = formatDate(nextDay);
+        </script>
         <div class="col-2">
             <a id="btnBuscarQuarto" class="btn btn-primary">Buscar Quartos</a>
         </div>
+
+        <div class="col-2">
+            <a id="reservarQuarto" class="d-none btn btn-success" onclick="reservar()">Realizar Locação</a>
+        </div>
         <div id="area_quartos"></div>
     </div>
+    <div class="input-group mb-3">
+        <div id="info_quarto" class="d-none row">
+            <div class="col-6">
+                <span>Valor: </span>
+                <span id="valor_quarto"></span>
+            </div>
+            <div class="col-6">
+                <span>Quantidade de Camas: </span>
+                <span id="capacidade_quarto"></span>
+            </div>
+        </div>
+    </div>
+
     <hr/>
 </div>
 </body>
