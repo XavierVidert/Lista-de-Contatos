@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class C_Login {
     @Autowired
     private S_Home s_home;
-
     @GetMapping("/")
     public String getLogin(HttpSession session,
                            Model model){
+        M_Usuario m_usuario = (M_Usuario) session.getAttribute("usuario");
         if(session.getAttribute("usuario") != null){
-            model.addAttribute("usuarios", s_home.getUsuarios());
+            model.addAttribute("em_curso",
+                    s_home.getLocacaoEmCurso(m_usuario.getId()));
             return "home/home";
         }
         return "index";
@@ -31,7 +32,7 @@ public class C_Login {
     public String postLogin(@RequestParam("usuario") String usuario,
                             @RequestParam("senha") String senha,
                             HttpSession session){
-        M_Usuario m_usuario = S_Login.validaLogin(usuario,senha);
+        M_Usuario m_usuario = S_Login.validaLogin(usuario, senha);
         session.setAttribute("usuario",m_usuario);
         return "redirect:/";
     }
@@ -39,7 +40,7 @@ public class C_Login {
     @GetMapping("/logout")
     @ResponseBody
     public boolean getLogout(HttpSession session){
-        session.setAttribute("usuario", null);
+        session.setAttribute("usuario",null);
         return true;
     }
 }
