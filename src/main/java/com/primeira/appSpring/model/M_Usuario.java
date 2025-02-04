@@ -18,6 +18,15 @@ public class M_Usuario {
     @Column(unique = true)
     private String apelido;
     private String senha;
+    private String emael;
+
+    public String getEmael() {
+        return emael;
+    }
+
+    public void setEmael(String emael) {
+        this.emael = emael;
+    }
 
     public Long getId() {
         return id;

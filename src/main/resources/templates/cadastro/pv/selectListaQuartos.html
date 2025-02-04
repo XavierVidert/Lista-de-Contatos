@@ -1,6 +1,0 @@
-<select id="quarto" onchange="atualizaValores(this)">
-    <option th:each="quarto : ${quartos}" th:value="${quarto.id}"
-            th:data-preco="${quarto.preco}"
-            th:data-capacidadeHospedes="${quarto.capacidadeHospedes}"
-        th:text="${quarto.nome}"></option>
-</select>
