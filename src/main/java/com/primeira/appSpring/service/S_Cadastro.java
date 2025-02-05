@@ -14,6 +14,7 @@ public class S_Cadastro {
 
     public static M_Usuario cadastrarUsuario(String usuario,
                                       String apelido,
+                                      String telefone,
                                       String senha,
                                       String conf_senha){
         boolean podeSalvar = true;

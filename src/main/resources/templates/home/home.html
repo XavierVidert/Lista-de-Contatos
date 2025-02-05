@@ -9,14 +9,14 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h2>Lista de Contatos</h2>
+    <h2 class="text-center">Lista de Contatos</h2>
+    <hr/>
 
     <div class="alert alert-success mt-3" th:if="${mensagem}" th:text="${mensagem}"></div>
 
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped text-center">
+        <thead class="table-dark">
         <tr>
-            <a class="btn btn-danger" id="btnLogout">Logout</a>
             <th>Nome</th>
             <th>Apelido</th>
             <th>Email</th>
@@ -31,14 +31,36 @@
             <td th:text="${contato.email}"></td>
             <td th:text="${contato.telefone}"></td>
             <td>
-                <a th:href="@{/excluir(id=${contato.id})}" class="btn btn-danger"
-                   onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
+                <button class="btn btn-danger btn-sm" th:attr="data-id=${contato.id}" onclick="confirmarExclusao(this)">Excluir</button>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <a href="/adicionarContato" class="btn btn-primary">Adicionar Novo Contato</a>
+    <div class="d-flex justify-content-between">
+        <a href="/adicionarContato" class="btn btn-primary">Adicionar Novo Contato</a>
+        <a class="btn btn-danger" id="btnLogout">Logout</a>
+    </div>
 </div>
+
+<script>
+    function confirmarExclusao(elemento) {
+        const contatoId = elemento.getAttribute("data-id");
+        Swal.fire({
+            title: "Tem certeza?",
+            text: "Essa ação não pode ser desfeita!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sim, excluir!",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/excluir?id=${contatoId}`;
+            }
+        });
+    }
+</script>
 </body>
 </html>

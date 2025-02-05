@@ -1,23 +1,41 @@
 package com.primeira.appSpring.model;
 
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "contatos")
 public class M_Contato {
-
-
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_contato;
 
     private String nome;
-    private String apelido;
-    private String email;
     private String telefone;
 
-    // Getters e Setters
+    private String email;
 
-    public Long getId() {
-        return id;
+    private String apelido;
+
+    public String getApelido() {
+        return apelido;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setApelido(String apelido) {
+        this.apelido = apelido;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private M_Usuario usuario;
+
+    public Long getId_contato() {
+        return id_contato;
+    }
+
+    public void setId_contato(Long id_contato) {
+        this.id_contato = id_contato;
     }
 
     public String getNome() {
@@ -28,12 +46,12 @@ public class M_Contato {
         this.nome = nome;
     }
 
-    public String getApelido() {
-        return apelido;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setApelido(String apelido) {
-        this.apelido = apelido;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public String getEmail() {
@@ -44,11 +62,12 @@ public class M_Contato {
         this.email = email;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public M_Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setUsuario(M_Usuario usuario) {
+        this.usuario = usuario;
     }
 }
+

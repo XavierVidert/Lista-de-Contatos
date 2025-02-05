@@ -1,9 +1,9 @@
 package com.primeira.appSpring.controller;
 
 import com.primeira.appSpring.model.M_Usuario;
+import com.primeira.appSpring.service.S_Contato;
 import com.primeira.appSpring.service.S_Login;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,41 +13,46 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class C_Login {
+    private final S_Contato s_contato;
+    private final S_Login s_login;
 
-    // Método GET para mostrar o formulário de login
-    @GetMapping("/")
-    public String getLogin(HttpSession session, Model model) {
-        // Verifica se já há um usuário na sessão, redirecionando para a página principal
-        if (session.getAttribute("usuario") != null) {
-            return "redirect:/home"; // Se o usuário já estiver logado, vai para a página inicial
-        }
-        return "index"; // Caso contrário, exibe o formulário de login
+    public C_Login(S_Contato s_contato, S_Login s_login) {
+        this.s_contato = s_contato;
+        this.s_login = s_login;
     }
 
-    // Método POST para processar o login
+    @GetMapping("/")
+    public String getLogin(HttpSession session, Model model) {
+        M_Usuario m_usuario = (M_Usuario) session.getAttribute("usuario");
+
+        // Se o usuário já estiver logado, exibe a lista de contatos
+        if (m_usuario != null) {
+            model.addAttribute("contatos", s_contato.listarContatos());
+            return "home/home";
+        }
+
+        return "index"; // Página de login
+    }
+
     @PostMapping("/")
     public String postLogin(@RequestParam("usuario") String usuario,
                             @RequestParam("senha") String senha,
                             HttpSession session, Model model) {
+        M_Usuario m_usuario = s_login.validaLogin(usuario, senha);
 
-        // Verifica se as credenciais são válidas
-        M_Usuario m_usuario = S_Login.validaLogin(usuario, senha);
-
-        // Se o login for válido, salva na sessão
         if (m_usuario != null) {
             session.setAttribute("usuario", m_usuario);
-            return "redirect:/home"; // Redireciona para a página inicial após o login bem-sucedido
+            return "redirect:/"; // Redireciona para a Home com os contatos
         }
 
-        // Caso as credenciais sejam inválidas, retorna à página de login com uma mensagem de erro
         model.addAttribute("erro", "Usuário ou senha inválidos!");
-        return "index"; // Redireciona de volta para a página de login
+        return "index";
     }
 
-    // Método GET para fazer o logout do usuário
     @GetMapping("/logout")
-    public String getLogout(HttpSession session) {
-        session.invalidate(); // Invalida a sessão do usuário, removendo todos os dados
-        return "redirect:/"; // Redireciona para a página inicial (login)
+    @ResponseBody
+    public boolean getLogout(HttpSession session){
+        session.setAttribute("usuario",null);
+        return true;
     }
 }
